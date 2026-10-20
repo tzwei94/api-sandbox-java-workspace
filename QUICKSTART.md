@@ -11,8 +11,8 @@ On macOS, follow [the prerequisite bootstrap](SETUP.md#macos-prerequisites), the
 Clone the main repository, including its application and deployment submodules:
 
 ```sh
-git clone --recurse-submodules https://github.com/tzwei94/banking-platform.git banking-demo
-cd banking-demo
+git clone --recurse-submodules https://github.com/tzwei94/api-sandbox-java-workspace.git api-sandbox-java-workspace
+cd api-sandbox-java-workspace
 git submodule update --init --recursive
 docker info
 docker compose version

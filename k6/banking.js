@@ -136,7 +136,7 @@ export function teardown(data) {
 }
 
 export function handleSummary(data) {
-  const lines = [`Banking API: ${config.profile} / ${config.workload}`];
+  const lines = [`API Sandbox (Java): ${config.profile} / ${config.workload}`];
   const completed = data.metrics.iterations?.values.count || 0;
   lines.push(`Completed iterations: ${completed}`);
   if (completed === 0) lines.push('No workload completed. Check the process exit status and preflight errors.');

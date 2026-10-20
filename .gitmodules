@@ -1,6 +1,6 @@
 [submodule "app"]
 	path = app
-	url = ../banking-api.git
+	url = ../api-sandbox-java.git
 [submodule "deployment"]
 	path = deployment
-	url = ../banking-infrastructure.git
+	url = ../api-sandbox-java-infra.git

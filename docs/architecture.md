@@ -1,4 +1,4 @@
-# Banking API architecture
+# API Sandbox (Java) architecture
 
 ## Overview
 
@@ -17,7 +17,7 @@ AWS hosts the API, RDS, EC2 runner and private ECR repositories. Grafana/Prometh
 | GitHub | External hosted service | Separate repositories: `app` for Java/build/publish and `deployment` for Terraform/deployment. Example Terraform profiles use placeholder repository names; override them to match the actual repositories. |
 | Cloudflare DNS | External authoritative DNS, operator-managed | DNS-only API CNAME points to the ALB DNS name; proxy disabled (grey cloud). |
 | Application Load Balancer | Public subnet in each of two AZs | HTTPS entry point with ACM certificate; port 80 redirects to HTTPS if enabled. Target type `ip`. |
-| Banking API | Private application subnets, two AZs | Two Java Fargate tasks with AZ spreading, no public IPs; one Alloy sidecar per task for logs, metrics and traces. Start at 0.5 vCPU / 1 GiB each, including the JVM and Alloy in the resource budget. |
+| API Sandbox (Java) | Private application subnets, two AZs | Two Java Fargate tasks with AZ spreading, no public IPs; one Alloy sidecar per task for logs, metrics and traces. Start at 0.5 vCPU / 1 GiB each, including the JVM and Alloy in the resource budget. |
 | RDS PostgreSQL | Isolated DB subnet group spanning two AZs | Budget-first single-AZ `db.t4g.micro`, private endpoint, encrypted storage and backups. Multi-AZ primary/standby is a separately costed upgrade. |
 | GitHub Actions runner | Private application subnet, separate runner SG | Publishes the image built on GitHub-hosted runners and runs Terraform releases. Default 2 vCPU / 4 GiB; the example selects 2 vCPU / 2 GiB. Stop outside publication/deployment windows. Repo-specific OIDC roles; minimal instance role. |
 | Amazon ECR | AWS regional service | Terraform-managed API and Alloy repositories; immutable tags, encrypted storage and IAM-authenticated push/pull. |

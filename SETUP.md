@@ -23,8 +23,8 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 Clone this repository with its submodules if needed, then start the menu from its root:
 
 ```sh
-git clone --recurse-submodules https://github.com/tzwei94/banking-platform.git banking-demo
-cd banking-demo
+git clone --recurse-submodules https://github.com/tzwei94/api-sandbox-java-workspace.git api-sandbox-java-workspace
+cd api-sandbox-java-workspace
 uv run deployment/deploy/scripts/setup.py
 ```
 
@@ -164,8 +164,8 @@ Verify the returned account before continuing. The following variables are non-s
 ```sh
 export PROJECT_ROOT="$PWD"
 export GH_OWNER=REPLACE_GITHUB_OWNER
-export APP_REPO=banking-api
-export DEPLOY_REPO=banking-infrastructure
+export APP_REPO=api-sandbox-java
+export DEPLOY_REPO=api-sandbox-java-infra
 export API_HOST=api.REPLACE_YOUR_DOMAIN
 export ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
 export REGISTRY_HOST="$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"

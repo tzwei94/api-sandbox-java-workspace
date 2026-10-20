@@ -4,13 +4,15 @@ The three repositories are already **public**. GitHub visibility and published b
 
 | Repository | Default branch | Published commit inspected |
 |---|---|---|
-| [banking-platform](https://github.com/tzwei94/banking-platform) | `main` | `6b45677` |
-| [banking-api](https://github.com/tzwei94/banking-api) | `main` | `1035aeb` |
-| [banking-infrastructure](https://github.com/tzwei94/banking-infrastructure) | `main` | `3a1763a` |
+| [api-sandbox-java-workspace](https://github.com/tzwei94/api-sandbox-java-workspace) | `main` | `6b45677` |
+| [api-sandbox-java](https://github.com/tzwei94/api-sandbox-java) | `main` | `1035aeb` |
+| [api-sandbox-java-infra](https://github.com/tzwei94/api-sandbox-java-infra) | `main` | `3a1763a` |
 
 At that check, the parent pinned the application and deployment commits above. Keep their workflows in their own repositories. Commit and push submodule changes before updating the parent references, so a recursive clone can retrieve the pinned commits.
 
 On 5 October 2026, the repositories were renamed from `assignment`, `app` and `deployment` to `banking-platform`, `banking-api` and `banking-infrastructure`. Repository identities and history are retained. The workspace still uses `app/` and `deployment/` submodule directories. Repository URLs, Actions handoff settings and Terraform repository names use the new names.
+
+On 20 October 2026, the repositories were renamed to `api-sandbox-java-workspace`, `api-sandbox-java` and `api-sandbox-java-infra` to describe their testing purpose. The project uses synthetic account operations as an example API. Existing runtime resource names, database identifiers, image names and telemetry labels retain their established values.
 
 Existing image manifests retain the repository name recorded at publication. Select a fresh successful CI/publish run under the new name when creating a new release or resolving a new Alloy publication.
 

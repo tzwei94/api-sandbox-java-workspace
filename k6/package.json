@@ -1,5 +1,5 @@
 {
-  "name": "banking-api-k6",
+  "name": "api-sandbox-java-k6",
   "private": true,
   "type": "module",
   "scripts": {

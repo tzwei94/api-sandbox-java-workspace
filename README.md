@@ -1,13 +1,13 @@
-# Banking Platform
+# API Sandbox Java Workspace
 
-A Java banking demo with three authenticated operations: check a balance, deposit money and withdraw money. It uses Spring Boot, PostgreSQL, Terraform and GitHub Actions. All example accounts are synthetic.
+A workspace for a small Java API sandbox used to test authentication, account operations, CI/CD and deployments. Its synthetic banking-style example supports checking balances, deposits and withdrawals. It uses Spring Boot, PostgreSQL, Terraform and GitHub Actions. All example accounts are synthetic.
 
 ## Start here
 
 | What you need | Read this |
 |---|---|
 | Run the application on your computer | **[Local quickstart](QUICKSTART.md)** — prerequisites, commands for all three API operations, tests and cleanup |
-| Try requests in Postman | [Importable collection and environment](https://github.com/tzwei94/banking-api/blob/main/postman/README.md) — Basic login, health, balances, deposits, withdrawals and retry checks |
+| Try requests in Postman | [Importable collection and environment](https://github.com/tzwei94/api-sandbox-java/blob/main/postman/README.md) — Basic login, health, balances, deposits, withdrawals and retry checks |
 | Stress test the API | [k6 project](k6/README.md) — smoke, load, stress and soak profiles for authenticated banking requests |
 | Create AWS infrastructure and deploy | **[AWS setup guide](SETUP.md)** — preparation, Terraform, secrets, CI/CD, first deployment and teardown, in order |
 | Deploy a new application version | **[New-version deployment flow](#deploy-a-new-application-version)** — release preparation, image selection, deployment and verification |
@@ -20,10 +20,10 @@ A Java banking demo with three authenticated operations: check a balance, deposi
 
 A Postman collection and environment template are included, ready to import:
 
-- [Banking API collection](https://github.com/tzwei94/banking-api/blob/main/postman/Banking-API.postman_collection.json) — login, health, balance, deposit, withdrawal and retry checks.
-- [Environment template](https://github.com/tzwei94/banking-api/blob/main/postman/Local.postman_environment.json) — connection settings with empty credentials.
+- [Banking API collection](https://github.com/tzwei94/api-sandbox-java/blob/main/postman/Banking-API.postman_collection.json) — login, health, balance, deposit, withdrawal and retry checks.
+- [Environment template](https://github.com/tzwei94/api-sandbox-java/blob/main/postman/Local.postman_environment.json) — connection settings with empty credentials.
 
-In Postman, choose **Import** and select both JSON files. Select the imported environment, set `base_url` to `https://bnk-api.tzwei.me`, and fill `token_username` and `token_password` with your API credentials locally. Send **Authentication → Get token**; it saves the Bearer token automatically for the banking requests. See the [Postman guide](https://github.com/tzwei94/banking-api/blob/main/postman/README.md) for the request sequence and local environment setup.
+In Postman, choose **Import** and select both JSON files. Select the imported environment, set `base_url` to `https://bnk-api.tzwei.me`, and fill `token_username` and `token_password` with your API credentials locally. Send **Authentication → Get token**; it saves the Bearer token automatically for the banking requests. See the [Postman guide](https://github.com/tzwei94/api-sandbox-java/blob/main/postman/README.md) for the request sequence and local environment setup.
 
 ## Review environment URLs
 
@@ -41,7 +41,7 @@ These URLs identify the configured review environment; they are not a live avail
 | Application logs | [Grafana log search](https://grafana.tzwei.me/d/banking-api-logs?orgId=2) | Filter application logs by environment, operation, severity and message. |
 | Service dependencies | [Grafana service graph](https://grafana.tzwei.me/d/banking-api-service-graph?orgId=2) | Trace-derived dependencies, request rates, errors and latency. |
 
-The authenticated banking routes are `GET /accounts/{id}/balance`, `POST /accounts/{id}/deposits` and `POST /accounts/{id}/withdrawals`, relative to the API base URL. See the [Postman guide](https://github.com/tzwei94/banking-api/blob/main/postman/README.md) for request bodies, account IDs and idempotency keys.
+The authenticated banking routes are `GET /accounts/{id}/balance`, `POST /accounts/{id}/deposits` and `POST /accounts/{id}/withdrawals`, relative to the API base URL. See the [Postman guide](https://github.com/tzwei94/api-sandbox-java/blob/main/postman/README.md) for request bodies, account IDs and idempotency keys.
 
 ### Credential placeholders
 
@@ -73,10 +73,10 @@ This repository pins two Git submodules. Each has its own GitHub Actions workflo
 
 | Deliverable | Source | Repository URL |
 |---|---|---|
-| Application code, Dockerfile and CI | [app/](app) | [Application repository](https://github.com/tzwei94/banking-api) |
-| Terraform and deployment pipeline | [deployment/](deployment) | [Infrastructure repository](https://github.com/tzwei94/banking-infrastructure) |
+| Application code, Dockerfile and CI | [app/](app) | [Application repository](https://github.com/tzwei94/api-sandbox-java) |
+| Terraform and deployment pipeline | [deployment/](deployment) | [Infrastructure repository](https://github.com/tzwei94/api-sandbox-java-infra) |
 
-See [application reference](https://github.com/tzwei94/banking-api/blob/main/README.md) and [deployment reference](https://github.com/tzwei94/banking-infrastructure/blob/main/README.md) for implementation details.
+See [application reference](https://github.com/tzwei94/api-sandbox-java/blob/main/README.md) and [deployment reference](https://github.com/tzwei94/api-sandbox-java-infra/blob/main/README.md) for implementation details.
 
 ## Deploy a new application version
 
@@ -109,11 +109,11 @@ flowchart TD
 
 1. **Start the next release on a feature branch.** In the application repository, update your local `main` and create a branch such as `feature/transfer-validation`. Develop against the next Maven snapshot version in `pom.xml`, for example `0.1.1-SNAPSHOT` after release `0.1.0`. Normally **C. Create Release** has already opened a next-development version PR: review and merge that PR, then bring the updated `main` into your feature branch. Keep this snapshot version throughout feature development; each feature branch does not need its own version increment. The final patch, minor or major version is chosen during release preparation.
 2. **Implement, review and merge the feature.** Make the code changes, run local checks, push the feature branch and open a PR targeting `main`. **A. Application CI** runs lint, tests, image build and scan on the PR. Address review feedback and failed checks, obtain approval, then merge. The main-push CI repeats the checks and publishes a snapshot image. Repeat this development cycle for any other features included in the release; merging a feature does not deploy it.
-3. **Prepare the final release version.** Once the planned features are merged and main CI passes, run [B. Prepare Release](https://github.com/tzwei94/banking-api/blob/main/.github/workflows/prepare-release.yml) on `main`, choosing `patch`, `minor` or `major`. Review its version-only PR and merge after the checks pass.
-4. **Wait for the merged version's CI.** The merge starts [A. Application CI](https://github.com/tzwei94/banking-api/blob/main/.github/workflows/app-ci.yml), which tests, builds, scans and publishes the final-version image. Use the successful **main-push run for this merge**, not the PR check run or an unrelated later run. Copy its run ID.
-5. **Record the release.** Run [C. Create Release](https://github.com/tzwei94/banking-api/blob/main/.github/workflows/release.yml) on `main` with that `ci-run-id`. It creates the version tag and GitHub Release with `image-manifest.json`, referencing the existing image. Download that manifest or use the release workflow's deployment summary. Review and merge the next-development snapshot PR it opens; that PR is separate from the image selected for deployment.
-6. **Select the Alloy image.** Reuse the existing validated `alloy_image` digest when no collector update is needed. Run [I. Publish Alloy Image](https://github.com/tzwei94/banking-infrastructure/blob/main/.github/workflows/publish-alloy.yml) when you need a new collector build or have no validated digest yet, then copy `alloy_image` from its successful summary or artifact. Publishing Alloy alone does not update the running service.
-7. **Deploy in the deployment repository.** Ensure the selected deployment `main` revision has passed [A. Deployment CI](https://github.com/tzwei94/banking-infrastructure/blob/main/.github/workflows/terraform-ci.yml). Open [B. Deploy or Roll Back](https://github.com/tzwei94/banking-infrastructure/blob/main/.github/workflows/deploy-dev.yml), select `main`, and supply the inputs below. Deployment CI validates the deployment code; it does not deploy the application. Infrastructure changes require their own reviewed operator plan/apply before this application deployment.
+3. **Prepare the final release version.** Once the planned features are merged and main CI passes, run [B. Prepare Release](https://github.com/tzwei94/api-sandbox-java/blob/main/.github/workflows/prepare-release.yml) on `main`, choosing `patch`, `minor` or `major`. Review its version-only PR and merge after the checks pass.
+4. **Wait for the merged version's CI.** The merge starts [A. Application CI](https://github.com/tzwei94/api-sandbox-java/blob/main/.github/workflows/app-ci.yml), which tests, builds, scans and publishes the final-version image. Use the successful **main-push run for this merge**, not the PR check run or an unrelated later run. Copy its run ID.
+5. **Record the release.** Run [C. Create Release](https://github.com/tzwei94/api-sandbox-java/blob/main/.github/workflows/release.yml) on `main` with that `ci-run-id`. It creates the version tag and GitHub Release with `image-manifest.json`, referencing the existing image. Download that manifest or use the release workflow's deployment summary. Review and merge the next-development snapshot PR it opens; that PR is separate from the image selected for deployment.
+6. **Select the Alloy image.** Reuse the existing validated `alloy_image` digest when no collector update is needed. Run [I. Publish Alloy Image](https://github.com/tzwei94/api-sandbox-java-infra/blob/main/.github/workflows/publish-alloy.yml) when you need a new collector build or have no validated digest yet, then copy `alloy_image` from its successful summary or artifact. Publishing Alloy alone does not update the running service.
+7. **Deploy in the deployment repository.** Ensure the selected deployment `main` revision has passed [A. Deployment CI](https://github.com/tzwei94/api-sandbox-java-infra/blob/main/.github/workflows/terraform-ci.yml). Open [B. Deploy or Roll Back](https://github.com/tzwei94/api-sandbox-java-infra/blob/main/.github/workflows/deploy-dev.yml), select `main`, and supply the inputs below. Deployment CI validates the deployment code; it does not deploy the application. Infrastructure changes require their own reviewed operator plan/apply before this application deployment.
 
 | Deployment input | Value for a normal new-version deployment |
 |---|---|
@@ -125,7 +125,7 @@ flowchart TD
 
 8. **Verify the result.** Wait for the deployment workflow to complete its migration, ECS promotion, health checks, authenticated smoke tests and deployment-manifest recording. Check `/readyz` and confirm `/version` reports the selected version and application SHA. Inspect the [dashboards and logs](docs/observability/README.md) and follow the [deployment checks](docs/verification.md#deployment-checks). A successful image publication or GitHub Release alone does not mean the version is deployed.
 
-**Rollback:** Run **B. Deploy or Roll Back** with `action=rollback` and `first_release=false`. The workflow still requires valid image and SHA inputs, but selects the retained previous task definition from the deployment manifest. It checks health and updates the manifest; it does not reverse database migrations. See the [deployment reference](https://github.com/tzwei94/banking-infrastructure/blob/main/README.md) for rollback details and the [application release guide](https://github.com/tzwei94/banking-api/blob/main/docs/ci-cd.md) for release validation and reruns.
+**Rollback:** Run **B. Deploy or Roll Back** with `action=rollback` and `first_release=false`. The workflow still requires valid image and SHA inputs, but selects the retained previous task definition from the deployment manifest. It checks health and updates the manifest; it does not reverse database migrations. See the [deployment reference](https://github.com/tzwei94/api-sandbox-java-infra/blob/main/README.md) for rollback details and the [application release guide](https://github.com/tzwei94/api-sandbox-java/blob/main/docs/ci-cd.md) for release validation and reruns.
 
 ## What is implemented
 
@@ -149,4 +149,4 @@ The guides describe the source checked on 27 September 2026. Deployment status a
 - Application rollback restores a previous task definition; it does not roll back database migrations.
 - Local smoke checks use a telemetry test receiver. Live backend ingestion, recovery and deployment health need the [deployment checks](docs/verification.md#deployment-checks).
 
-All three repositories are already public. See [public repository status and maintenance](docs/public-sharing.md) for the verified history scope and credential handling. The [Alloy scan record](https://github.com/tzwei94/banking-infrastructure/blob/main/deploy/monitoring/security-review.md) records the successful 1.20.0 candidate scan; image publication performs a new scan.
+All three repositories are already public. See [public repository status and maintenance](docs/public-sharing.md) for the verified history scope and credential handling. The [Alloy scan record](https://github.com/tzwei94/api-sandbox-java-infra/blob/main/deploy/monitoring/security-review.md) records the successful 1.20.0 candidate scan; image publication performs a new scan.
